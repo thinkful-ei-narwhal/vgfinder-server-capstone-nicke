@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS vgfinder_games CASCADE;
+
+DROP TYPE IF EXISTS genre_types;
