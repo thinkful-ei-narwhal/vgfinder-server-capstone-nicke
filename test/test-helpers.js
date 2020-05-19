@@ -51,7 +51,7 @@ function makeGamesArray() {
       title: "dunderTale",
       description: "test decription",
       genre: "Action",
-      rating: "3",
+      rating: "3.00",
       release_date: "2029-01-22T16:28:32.615Z",
       developer: "Dunder studios",
       trailer_url: "http://placehold.it/500x500",
@@ -66,7 +66,7 @@ function makeGamesArray() {
       title: "bumberDale",
       description: "test decription",
       genre: "Action",
-      rating: "3",
+      rating: "3.00",
       release_date: "2029-01-22T16:28:32.615Z",
       developer: "Dunder studios",
       trailer_url: "http://placehold.it/500x500",
@@ -81,7 +81,7 @@ function makeGamesArray() {
       title: "lumberPale",
       description: "test decription",
       genre: "Action",
-      rating: "3",
+      rating: "3.00",
       release_date: "2029-01-22T16:28:32.615Z",
       developer: "Dunder studios",
       trailer_url: "http://placehold.it/500x500",
@@ -96,7 +96,7 @@ function makeGamesArray() {
       title: "clumberGale",
       description: "test decription",
       genre: "Action",
-      rating: "3",
+      rating: "3.00",
       release_date: "2029-01-22T16:28:32.615Z",
       developer: "Dunder studios",
       trailer_url: "http://placehold.it/500x500",
@@ -149,11 +149,19 @@ function makeWishlistArray(users, games) {
   ];
 }
 
+function makeExpectedWishlist(wishlist) {
+  return {
+    id: wishlist.id,
+    user_id: wishlist.user_id,
+    game_id: wishlist.game_id
+  }
+}
+
 function makeExpectedGame(game) {
   return {
     id: game.id,
     title: game.title,
-    description: game.decription,
+    description: game.description,
     genre: game.genre,
     rating: game.rating,
     release_date: game.release_date,
@@ -167,15 +175,19 @@ function makeExpectedGame(game) {
   }
 }
 
+function makeExpectedGamesForUserWishlist(user, games, wishlists) {
+  const userGameIdList = wishlists.filter(wishlist => wishlist.user_id === user.id).map(wishlistItem => wishlistItem.game_id);
+  return games.filter(game => userGameIdList.includes(game.id));
+}
 
 function makeMaliciousGame() {
   const maliciousGame = {
     id: 911,
     title: 'Naughty naughty very naughty <script>alert("xss");</script>',
     description: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
-    genre: game.genre,
-    rating: game.rating,
-    release_date: game.release_date,
+    genre: "Adventure",
+    rating: "8",
+    release_date: "2029-01-22T16:28:32.615Z",
     developer: "malicious",
     trailer_url: 'http://placehold.it/500x500',
     image_url_box_art: 'http://placehold.it/500x500',
@@ -187,7 +199,7 @@ function makeMaliciousGame() {
   const expectedGame = {
     ...makeExpectedGame(maliciousGame),
     title: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
-    content: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+    description: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
   }
   return {
     maliciousGame,
@@ -222,19 +234,12 @@ function seedGamesTables(db, users, games, wishlists = []) {
         .insert(games)
     )
     .then(() =>
-      wishlist.length && db.into('vgfinder_wishlists').insert(wishlists)
+      wishlists.length && db.into('vgfinder_wishlists').insert(wishlists)
     )
 }
 
-function seedMaliciousGame(db, user, game) {
-  return db
-    .into('vgfinder_users')
-    .insert([user])
-    .then(() =>
-      db
-        .into('vgfinder_games')
-        .insert([game])
-    )
+function seedMaliciousGame(db, game) {
+  return db.into('vgfinder_games').insert([game]);
 }
 
 module.exports = {
@@ -242,6 +247,8 @@ module.exports = {
   makeGamesArray,
   makeWishlistArray,
   makeExpectedGame,
+  makeExpectedWishlist,
+  makeExpectedGamesForUserWishlist,
   makeMaliciousGame,
   seedUsers,
   makeGamesFixtures,

@@ -71,13 +71,13 @@ async function checkWishlistItemExists(req, res, next) {
   try {
     let wishlist;
     if (req.params.user_id) {
-      wishlist = await WishlistService.getWishlistedGamesByUser(req.app.get('db'), req.params.user_id)
+      wishlist = await WishlistService.getWishlistedGamesByUser(req.app.get('db'), req.params.user_id);
     }
     if (req.params.wishlist_id) {
       wishlist = await WishlistService.getWishlistById(req.app.get('db'), req.params.wishlist_id)
     }
 
-    if (!wishlist)
+    if (!wishlist || !wishlist.length)
       return res.status(404).json({
         error: `Wishlist doesn't exist`
       })
