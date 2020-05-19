@@ -2,7 +2,7 @@ const app = require("../src/app");
 const knex = require("knex");
 const helpers = require("./test-helpers");
 
-describe("Games Endpoints", function () {
+describe("wishlist Endpoints", function () {
   let db;
   const { testUsers, testGames, testWishlists } = helpers.makeGamesFixtures();
 
@@ -59,4 +59,16 @@ describe("Games Endpoints", function () {
     });
   });
 
+  describe("Protected endpoints", () => {
+    beforeEach("seed users", () => helpers.seedGamesTables(db, testUsers, testGames, testWishlists));
+
+    it("creates a wishlist item for a user, responding with 201", function () {
+      return supertest(app).post("/api/wishlists/users/1").set("Authorization", helpers.makeAuthHeader(testUsers[0]))
+        .send({ game_id: testWishlists[0].game_id }).expect(201);
+    });
+
+    it("deletes an existing wishlist item, responding with 204", function () {
+      return supertest(app).delete(`/api/games/${testGames[0].id}`).set("Authorization", helpers.makeAuthHeader(testUsers[0])).expect(204);
+    });
+  });
 });

@@ -3,8 +3,6 @@ const authRouter = express.Router();
 const jsonBodyParser = express.json();
 const UserService = require("../services/user-services");
 
-const authErrorObj = { error: "Incorrect user_name of passowrd" };
-
 authRouter.post("/login", jsonBodyParser, (req, res, next) => {
   const { user_name, password } = req.body;
   const loginUser = { user_name, password };
@@ -19,14 +17,14 @@ authRouter.post("/login", jsonBodyParser, (req, res, next) => {
   UserService.getUserWithUserName(req.app.get("db"), loginUser.user_name)
     .then(dbUser => {
       if (!dbUser) {
-        res.status(400).json(authErrorObj);
+        res.status(400).json({ error: "Incorrect user_name or password" });
       }
 
       //compare passwords //dbUser is hashed
       return UserService.comparePasswords(loginUser.password, dbUser.password).then(
         compareMatch => {
           if (!compareMatch) {
-            return res.status(400).json(authErrorObj);
+            return res.status(400).json({ error: "Incorrect user_name or password" });
           }
 
           const subject = dbUser.user_name;

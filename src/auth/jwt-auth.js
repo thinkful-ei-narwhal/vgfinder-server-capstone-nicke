@@ -15,7 +15,7 @@ function jwtAuth(req, res, next) {
     payload = UserService.verifyJwt(bearerToken);
   }
   catch (err) {
-    return res.status(401);
+    return res.status(401).json({ error: "Unauthorized request" });
   }
 
   UserService.getUserWithUserName(

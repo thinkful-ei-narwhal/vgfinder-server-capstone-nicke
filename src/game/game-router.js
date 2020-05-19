@@ -16,8 +16,33 @@ gamesRouter.route("/")
   })
   //protected endpoint
   .post(jwtAuth, jsonBodyParser, (req, res, next) => {
-    const { title, description, genre, rating, release_date, developer, trailer_url, image_url_box_art, image_url_two, image_url_three, image_url_four, image_url_five } = req.body;
-    const newGame = { title, description, genre, rating, release_date, developer, trailer_url, image_url_box_art, image_url_two, image_url_three, image_url_four, image_url_five };
+    const {
+      title,
+      description,
+      genre,
+      rating,
+      release_date,
+      developer,
+      trailer_url,
+      image_url_box_art,
+      image_url_two,
+      image_url_three,
+      image_url_four,
+      image_url_five } = req.body;
+    const newGame = {
+      title,
+      description,
+      genre,
+      rating,
+      release_date,
+      developer,
+      trailer_url,
+      image_url_box_art,
+      image_url_two,
+      image_url_three,
+      image_url_four,
+      image_url_five
+    };
 
     for (const [key, value] of Object.entries(newGame)) {
       if (key === "title" || key === "description" || key === "genre" || key === "rating" || key === "developer" || key === "trailer_url" || key === "image_url_box_art") {
@@ -29,7 +54,7 @@ gamesRouter.route("/")
       }
     }
 
-    for (let [key, value] of Object.entries(newGame)) {
+    for (let [value] of Object.entries(newGame)) {
       if (typeof (value) === "undefined") {
         value = null;
       }

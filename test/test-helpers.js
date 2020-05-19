@@ -1,3 +1,7 @@
+const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
+const config = require("./../src/config")
+
 function makeUsersArray() {
   return [
     {
@@ -42,7 +46,6 @@ function seedUsers(db, users) {
       )
     )
 }
-
 
 function makeGamesArray() {
   return [
@@ -233,13 +236,21 @@ function seedGamesTables(db, users, games, wishlists = []) {
         .into('vgfinder_games')
         .insert(games)
     )
-    .then(() =>
-      wishlists.length && db.into('vgfinder_wishlists').insert(wishlists)
-    )
+    .then(() => wishlists.length && db.into('vgfinder_wishlists').insert(wishlists))
+    .then(() => db.raw("ALTER SEQUENCE vgfinder_games_id_seq RESTART WITH 5"))
+    .then(() => db.raw("ALTER SEQUENCE vgfinder_wishlists_id_seq RESTART WITH 8"));
 }
 
 function seedMaliciousGame(db, game) {
   return db.into('vgfinder_games').insert([game]);
+}
+
+function makeAuthHeader(user, secret = config.JWT_TOKEN) {
+  const token = jwt.sign({ user_id: user.id }, secret, {
+    subject: user.user_name,
+    algorithm: "HS256"
+  });
+  return `Bearer ${token}`;
 }
 
 module.exports = {
@@ -255,4 +266,5 @@ module.exports = {
   cleanTables,
   seedGamesTables,
   seedMaliciousGame,
+  makeAuthHeader,
 }
