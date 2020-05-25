@@ -77,10 +77,11 @@ async function checkWishlistItemExists(req, res, next) {
       wishlist = await WishlistService.getWishlistById(req.app.get('db'), req.params.wishlist_id)
     }
 
-    if (!wishlist || !wishlist.length)
+    if (!wishlist) {
       return res.status(404).json({
         error: `Wishlist doesn't exist`
       })
+    }
 
     res.wishlist = wishlist
     next();

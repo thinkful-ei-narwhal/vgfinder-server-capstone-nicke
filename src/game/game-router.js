@@ -47,6 +47,7 @@ gamesRouter.route("/")
     for (const [key, value] of Object.entries(newGame)) {
       if (key === "title" || key === "description" || key === "genre" || key === "rating" || key === "developer" || key === "trailer_url" || key === "image_url_box_art") {
         if (!value) {
+          console.log('TESTING HIT MISSING??');
           return res.status(400).json({
             error: `Missing '${key}' in request body`
           });
@@ -56,6 +57,7 @@ gamesRouter.route("/")
 
     for (let [value] of Object.entries(newGame)) {
       if (typeof (value) === "undefined") {
+        console.log('TESTING HAPPENED FOR: ', value);
         value = null;
       }
     }
