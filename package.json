@@ -17,6 +17,9 @@
     "url": "git+https://github.com/thinkful-ei-narwhal/express-boilerplate-nicke.git"
   },
   "keywords": [],
+  "engines": {
+   "node": "13.3.0"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
