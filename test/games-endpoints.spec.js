@@ -27,10 +27,14 @@ describe("Games Endpoints", function () {
       });
 
       context("Games in the database", () => {
-        beforeEach("insert games", () => helpers.seedGamesTables(db, testUsers, testGames, testWishlists));
+        beforeEach("insert games", () =>
+          helpers.seedGamesTables(db, testUsers, testGames, testWishlists)
+        );
 
         it("responds with 200 and all of the games", () => {
-          const expectedGames = testGames.map(game => helpers.makeExpectedGame(game));
+          const expectedGames = testGames.map((game) =>
+            helpers.makeExpectedGame(game)
+          );
           return supertest(app).get("/api/games").expect(200, expectedGames);
         });
       });
@@ -46,7 +50,7 @@ describe("Games Endpoints", function () {
           return supertest(app)
             .get("/api/games")
             .expect(200)
-            .expect(res => {
+            .expect((res) => {
               expect(res.body[0].title).to.eql(expectedGame.title);
               expect(res.body[0].description).to.eql(expectedGame.description);
             });
@@ -58,18 +62,24 @@ describe("Games Endpoints", function () {
       context("Given no games", () => {
         it("responds with 404", () => {
           const gameId = 123456;
-          return supertest(app).get(`/api/games/${gameId}`).expect(404, { error: "Game doesn't exist" });
+          return supertest(app)
+            .get(`/api/games/${gameId}`)
+            .expect(404, { error: "Game doesn't exist" });
         });
       });
 
       context("Given there are games in the database", () => {
-        beforeEach("insert games", () => helpers.seedGamesTables(db, testUsers, testGames, testWishlists));
+        beforeEach("insert games", () =>
+          helpers.seedGamesTables(db, testUsers, testGames, testWishlists)
+        );
 
         it("responds with 200 and the specified game", () => {
           const gameId = 2;
           const expectedGame = helpers.makeExpectedGame(testGames[gameId - 1]);
 
-          return supertest(app).get(`/api/games/${gameId}`).expect(200, expectedGame);
+          return supertest(app)
+            .get(`/api/games/${gameId}`)
+            .expect(200, expectedGame);
         });
       });
 
@@ -84,7 +94,7 @@ describe("Games Endpoints", function () {
           return supertest(app)
             .get(`/api/games/${maliciousGame.id}`)
             .expect(200)
-            .expect(res => {
+            .expect((res) => {
               expect(res.body.title).to.eql(expectedGame.title);
               expect(res.body.description).to.eql(expectedGame.description);
             });
@@ -94,7 +104,9 @@ describe("Games Endpoints", function () {
   });
 
   describe("Protected endpoints", () => {
-    beforeEach("seed users", () => helpers.seedGamesTables(db, testUsers, testGames, testWishlists));
+    beforeEach("seed users", () =>
+      helpers.seedGamesTables(db, testUsers, testGames, testWishlists)
+    );
 
     it("creates a game, responding with 201 and the new game", function () {
       const game = { ...testGames[0] };
@@ -102,11 +114,18 @@ describe("Games Endpoints", function () {
       expectedGame = helpers.makeExpectedGame(game);
       expectedGame.id = 5;
 
-      return supertest(app).post("/api/games").set("Authorization", helpers.makeAuthHeader(testUsers[0])).send(game).expect(201, expectedGame);
+      return supertest(app)
+        .post("/api/games")
+        .set("Authorization", helpers.makeAuthHeader(testUsers[0]))
+        .send(game)
+        .expect(201, expectedGame);
     });
 
     it("deletes an existing game, responding with 204", function () {
-      return supertest(app).delete(`/api/games/${testGames[0].id}`).set("Authorization", helpers.makeAuthHeader(testUsers[0])).expect(204);
+      return supertest(app)
+        .delete(`/api/games/${testGames[0].id}`)
+        .set("Authorization", helpers.makeAuthHeader(testUsers[0]))
+        .expect(204);
     });
   });
 });

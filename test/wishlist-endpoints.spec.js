@@ -20,18 +20,22 @@ describe("wishlist Endpoints", function () {
   describe("GET /api/wishlists", () => {
     context("No games or users in the database", () => {
       it("responds with 200 and an empty list", () => {
-        return supertest(app)
-          .get("/api/wishlists")
-          .expect(200, []);
+        return supertest(app).get("/api/wishlists").expect(200, []);
       });
     });
 
     context("Wishlists in the database", () => {
-      beforeEach("insert wishlists", () => helpers.seedGamesTables(db, testUsers, testGames, testWishlists));
+      beforeEach("insert wishlists", () =>
+        helpers.seedGamesTables(db, testUsers, testGames, testWishlists)
+      );
 
       it("responds with 200 and all of the wishlists", () => {
-        const expectedWishlist = testWishlists.map(wishlist => helpers.makeExpectedWishlist(wishlist));
-        return supertest(app).get("/api/wishlists").expect(200, expectedWishlist);
+        const expectedWishlist = testWishlists.map((wishlist) =>
+          helpers.makeExpectedWishlist(wishlist)
+        );
+        return supertest(app)
+          .get("/api/wishlists")
+          .expect(200, expectedWishlist);
       });
     });
   });
@@ -47,8 +51,14 @@ describe("wishlist Endpoints", function () {
     });
 
     context("Given there are wishlists in the database", () => {
-      beforeEach("insert games", () => helpers.seedGamesTables(db, testUsers, testGames, testWishlists));
-      const makeExpectedGamesForWishlist = helpers.makeExpectedGamesForUserWishlist(testUsers[0], testGames, testWishlists);
+      beforeEach("insert games", () =>
+        helpers.seedGamesTables(db, testUsers, testGames, testWishlists)
+      );
+      const makeExpectedGamesForWishlist = helpers.makeExpectedGamesForUserWishlist(
+        testUsers[0],
+        testGames,
+        testWishlists
+      );
 
       it("responds with 200 and the specified wishlists", () => {
         const userId = 1;
@@ -60,15 +70,23 @@ describe("wishlist Endpoints", function () {
   });
 
   describe("Protected endpoints", () => {
-    beforeEach("seed users", () => helpers.seedGamesTables(db, testUsers, testGames, testWishlists));
+    beforeEach("seed users", () =>
+      helpers.seedGamesTables(db, testUsers, testGames, testWishlists)
+    );
 
     it("creates a wishlist item for a user, responding with 201", function () {
-      return supertest(app).post("/api/wishlists/users/1").set("Authorization", helpers.makeAuthHeader(testUsers[0]))
-        .send({ game_id: testWishlists[0].game_id }).expect(201);
+      return supertest(app)
+        .post("/api/wishlists/users/1")
+        .set("Authorization", helpers.makeAuthHeader(testUsers[0]))
+        .send({ game_id: testWishlists[0].game_id })
+        .expect(201);
     });
 
     it("deletes an existing wishlist item, responding with 204", function () {
-      return supertest(app).delete(`/api/games/${testGames[0].id}`).set("Authorization", helpers.makeAuthHeader(testUsers[0])).expect(204);
+      return supertest(app)
+        .delete(`/api/games/${testGames[0].id}`)
+        .set("Authorization", helpers.makeAuthHeader(testUsers[0]))
+        .expect(204);
     });
   });
 });

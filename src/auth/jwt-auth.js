@@ -6,30 +6,25 @@ function jwtAuth(req, res, next) {
   let payload;
   if (!authToken.toLowerCase().startsWith("bearer ")) {
     return res.status(401).json({ error: "Missing bearer token" });
-  }
-  else {
+  } else {
     bearerToken = authToken.split(" ")[1];
   }
 
   try {
     payload = UserService.verifyJwt(bearerToken);
-  }
-  catch (err) {
+  } catch (err) {
     return res.status(401).json({ error: "Unauthorized request" });
   }
 
-  UserService.getUserWithUserName(
-    req.app.get("db"),
-    payload.sub
-  )
-    .then(user => {
+  UserService.getUserWithUserName(req.app.get("db"), payload.sub)
+    .then((user) => {
       if (!user) {
         return res.status(401).json({ error: "Unauthorized request" });
       }
       req.user = user;
       next();
     })
-    .catch(err => {
+    .catch((err) => {
       // eslint-disable-next-line no-console
       console.error(err);
       next(err);

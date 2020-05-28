@@ -13,12 +13,12 @@ const UserService = {
   createJwt(subject, payload) {
     return jwt.sign(payload, config.JWT_TOKEN, {
       subject,
-      algorithm: "HS256"
+      algorithm: "HS256",
     });
   },
   verifyJwt(token) {
     return jwt.verify(token, config.JWT_TOKEN, { algorithms: ["HS256"] });
-  }
+  },
 };
 
 module.exports = UserService;
