@@ -46,7 +46,12 @@ Here are some examples of how to use the API:
  (Protected Endpoint) POST https://calm-chamber-73050.herokuapp.com/api/wishlists/users/<user_id> > Adds a game to the user wishlist
  
 # Screen shots
-
+<img src="screenshots/homepage.png" width="500">
+<img src="screenshots/wishlisting.png" width="500">
+<img src="screenshots/search.png" width="500">
+<img src="screenshots/login.png" width="500">
+<img src="screenshots/userContribution.png" width="500">
+<img src="screenshots/delete.png" width="500">
 
 # Summary
 VGFinder recommends new indie video game titles for gamers looking to find their new favorite game.
