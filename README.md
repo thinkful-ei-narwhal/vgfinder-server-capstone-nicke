@@ -1,5 +1,5 @@
 # Application
-VGFinder app
+VGFinder
 
 # Links
 You can find the live site here:
@@ -22,21 +22,27 @@ Here are some examples of how to use the API:
 	
   /api/games
  (Unprotected Endpoint)GET https://calm-chamber-73050.herokuapp.com/api/games > fetches all games in the database
+ 
  (Unprotected Endpoint)GET https://calm-chamber-73050.herokuapp.com/api/games/<game_id> > fetches the specified game from the database
+ 
  (Protected Endpoint) POST https://calm-chamber-73050.herokuapp.com/api/games > posts a game to the database
  	Example request body: 
 	{
 		"user_name":"dunder",
 		"password":"password"
 	}
+	
  (Protected Endpoint) DELETE http://localhost:8000/api/games/<game_id> > Deletes the target game from the database
 
  /api/wishlists
  (Unprotected Endpoint) GET https://calm-chamber-73050.herokuapp.com/api/wishlists ? Gets all wishlisted games for each user
+ 
  (Protected Endpoint) DELETE https://calm-chamber-73050.herokuapp.com/api/wishlists/<wishlist_id> > Removes a game from a user's wishlist
+
  
  /api/wishlists/users
  (Unprotected Endpoint)GET https://calm-chamber-73050.herokuapp.com/api/wishlists/users/<user_id> > Gets a wishlisted game for the specified user
+ 
  (Protected Endpoint) POST https://calm-chamber-73050.herokuapp.com/api/wishlists/users/<user_id> > Adds a game to the user wishlist
  
 # Screen shots
@@ -58,7 +64,7 @@ This project was completed with the following technologies:
 ## Development Set up
 Complete the following steps to use this project VGFinder:
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
+1. Clone this repository to your local machine `git clone NEW-PROJECTS-URL NEW-PROJECTS-NAME`
 2. `cd` into the cloned repository
 3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
 4. Install the node dependencies `npm install`

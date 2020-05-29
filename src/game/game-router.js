@@ -36,7 +36,7 @@ gamesRouter
       description,
       genre,
       rating,
-      release_date,
+      release_date: release_date + "Z",
       developer,
       trailer_url,
       image_url_box_art,
