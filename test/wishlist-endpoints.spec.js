@@ -41,15 +41,6 @@ describe("wishlist Endpoints", function () {
   });
 
   describe("GET /api/wishlists/users/:user_id", () => {
-    context("Given no users", () => {
-      it("responds with 404", () => {
-        const userId = 123456;
-        return supertest(app)
-          .get(`/api/wishlists/users/${userId}`)
-          .expect(404, { error: "Wishlist doesn't exist" });
-      });
-    });
-
     context("Given there are wishlists in the database", () => {
       beforeEach("insert games", () =>
         helpers.seedGamesTables(db, testUsers, testGames, testWishlists)
