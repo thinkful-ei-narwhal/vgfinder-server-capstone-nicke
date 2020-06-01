@@ -108,6 +108,19 @@ describe("Games Endpoints", function () {
       helpers.seedGamesTables(db, testUsers, testGames, testWishlists)
     );
 
+    it("creates a game, responding with 201 and the new game", function () {
+      const game = { ...testGames[0] };
+      delete game.id;
+      expectedGame = helpers.makeExpectedGame(game);
+      expectedGame.id = 5;
+
+      return supertest(app)
+        .post("/api/games")
+        .set("Authorization", helpers.makeAuthHeader(testUsers[0]))
+        .send(game)
+        .expect(201, expectedGame);
+    });
+
     it("deletes an existing game, responding with 204", function () {
       return supertest(app)
         .delete(`/api/games/${testGames[0].id}`)

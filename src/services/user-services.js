@@ -4,6 +4,9 @@ const config = require("./../config");
 const usersTable = "vgfinder_users";
 
 const UserService = {
+  getUserWithId(db, id) {
+    return db(usersTable).where({ id }).first();
+  },
   getUserWithUserName(db, user_name) {
     return db(usersTable).where({ user_name }).first();
   },

@@ -31,12 +31,17 @@ gamesRouter
       image_url_four,
       image_url_five,
     } = req.body;
+
+    if (!release_date.includes("Z")) {
+      release_date += "Z";
+    }
+
     const newGame = {
       title,
       description,
       genre,
       rating,
-      release_date: release_date + "Z",
+      release_date,
       developer,
       trailer_url,
       image_url_box_art,

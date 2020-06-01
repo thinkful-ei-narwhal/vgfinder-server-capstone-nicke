@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const WishlistService = require("./../services/wishlist-services");
 const GameService = require("./../services/games-services");
+const UserServices = require("./../services/user-services");
 const { jwtAuth } = require("./../auth/jwt-auth");
 const wishlistsRouter = express.Router();
 const jsonBodyParser = express.json();
@@ -20,11 +21,15 @@ wishlistsRouter
 wishlistsRouter
   .route("/users/:user_id")
   //unprotected
-  .get(checkWishlistItemExists, (req, res, next) => {
+  .get(checkUserExists, checkWishlistItemExists, (req, res, next) => {
     WishlistService.getWishlistedGamesByUser(
       req.app.get("db"),
       req.params.user_id
     ).then((wishlist) => {
+      if (!wishlist) {
+        return res.sendStatus(404);
+      }
+
       return res.status(200).json(GameService.serializeGames(wishlist));
     });
   })
@@ -74,6 +79,30 @@ wishlistsRouter
       )
       .catch(next);
   });
+
+/* async/await syntax for promises */
+async function checkUserExists(req, res, next) {
+  try {
+    let user;
+    if (req.params.user_id) {
+      user = await UserServices.getUserWithId(
+        req.app.get("db"),
+        req.params.user_id
+      );
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        error: `User doesn't exist`,
+      });
+    }
+
+    res.user = user;
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
 
 /* async/await syntax for promises */
 async function checkWishlistItemExists(req, res, next) {

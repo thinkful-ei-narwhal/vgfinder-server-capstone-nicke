@@ -25,6 +25,7 @@ app.use(function errorHandler(error, req, res, next) {
   } else {
     response = { message: error.message, error };
   }
+  console.log("500 error message ", error.message);
   res.status(500).json(response);
 });
 

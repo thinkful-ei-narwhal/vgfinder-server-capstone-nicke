@@ -57,6 +57,15 @@ describe("wishlist Endpoints", function () {
           .get(`/api/wishlists/users/${userId}`)
           .expect(200, makeExpectedGamesForWishlist);
       });
+
+      context("Given no users", () => {
+        it("responds with 404 user doesn't exist", () => {
+          const userId = 123456;
+          return supertest(app)
+            .get(`/api/wishlists/users/${userId}`)
+            .expect(404, { error: "User doesn't exist" });
+        });
+      });
     });
   });
 
