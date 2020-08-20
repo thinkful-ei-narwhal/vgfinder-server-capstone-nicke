@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/thinkful-ei-narwhal/express-boilerplate-nicke#readme",
   "dependencies": {
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "chai": "^4.2.0",
     "cors": "^2.8.5",
